@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-// import { quiz } from "../../data/countries.ts";
 import ScoreCard from "./ui/ScoreCard.tsx";
+import { Questions } from "../types/questions.ts";
 
-function Quiz({ quiz }: any){
+
+function Quiz({ quiz }: { quiz: Questions} ){
     const [activeQuestion, setActiveQuestion] = useState(0)
     const [selectedAnswer, setSelectedAnswer] = useState(false)    
     const [completeQuiz, setCompleteQuiz] = useState(false)
+    const [disableRepeatBtn, setDisableRepeatBtn] = useState(false)
     const [disableNextBtn, setDisableNextBtn] = useState(true)
     const [result, setResult] = useState({
         score: 0,
@@ -24,7 +26,7 @@ function Quiz({ quiz }: any){
     })
 
     const onClickNext = () => {
-        
+        setDisableRepeatBtn(false)
         setAnswerQuestion({
             answer: '',
             index: questions.length +1
@@ -55,6 +57,7 @@ function Quiz({ quiz }: any){
     }
 
     const onAnswerSelected = (answer: string, index: number) => {
+        setDisableRepeatBtn(true)
         setDisableNextBtn(false)
         if (answer === correctAnswer) {
             setSelectedAnswer(true)
@@ -106,7 +109,7 @@ function Quiz({ quiz }: any){
                     <div className="p-6 pt-0">
                         <div className="grid grid-cols-1 gap-3">
                         {
-                            choices.map((answer: any, index: any) => (                                 
+                            choices.map((answer: string, index: number) => (                                 
                                 <button 
                                     onClick={() => onAnswerSelected(answer, index)} 
                                     key={answer} 
@@ -117,14 +120,16 @@ function Quiz({ quiz }: any){
                         }
                             <div className="flex mt-4 flex-col space-y-2 sm:flex-row justify-between sm:space-y-0">
                                 <button 
-                                    onClick={repeatQuiz}
                                     className="w-full sm:w-1/3 inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium disabled:opacity-50 bg-gray-700 text-white shadow hover:bg-gray-600 h-9 px-6"
+                                    onClick={repeatQuiz}                                     
+                                    disabled={disableRepeatBtn}
                                 >
                                     Repeat
                                 </button>
                                 <button 
                                     className="w-full sm:w-1/3 inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium disabled:opacity-50 bg-blue-600 text-white shadow hover:bg-blue-500 h-9 px-6"
-                                    onClick={onClickNext} disabled={disableNextBtn}
+                                    onClick={onClickNext} 
+                                    disabled={disableNextBtn}
                                 >
                                     {activeQuestion === questions.length - 1 ? 'Finish' : 'Next'}
                                 </button>

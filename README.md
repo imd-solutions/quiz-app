@@ -1,16 +1,20 @@
 "# docker-template"
 
-# Run Development automatically
+# Run automatically
 
 node runDockerApp.js
 
-# Run Development manually
+# Run manually
 
-docker-compose --project-name quiz_app -f docker-compose.yml up --build
+docker-compose --project-name quiz_app -f docker-compose.yml up --build      
 
 (or if you want to detach the running process: Not show all the processing running in the terminal)
 
 docker-compose --project-name quiz_app -f docker-compose.yml up --build -d
+
+# Stop manually
+
+docker-compose --project-name quiz_app -f docker-compose.yml down
 
 # Set up backend
 

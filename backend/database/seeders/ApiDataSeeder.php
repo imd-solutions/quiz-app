@@ -20,34 +20,34 @@ class ApiDataSeeder extends Seeder
             $this->command->info('The database has already been populated.');
             return;
         }
-        // Define the API endpoint
+        
         $apiUrl = env('API_URL');
         $apiEndpoint = env('API_ENDPOINT');
 
         $url = $apiUrl . $apiEndpoint;
-
-        // Make an HTTP GET request to fetch data
+        
         try {
             $response = Http::get($url);
 
             if ($response->successful()) {
                 $data = $response->json();
-
-                // Iterate through the data and insert it into the database
+                
                 foreach ($data as $items) {
 
                     if (is_array($items)) {
 
                         foreach ($items as $item) {
-                            DB::table('countries')->insert([
-                                'country' => $item['name'],
-                                'capital' => $item['capital'],
-                                'iso2' => $item['iso2'],
-                                'iso3' => $item['iso3'],
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ]);
+                            if(!empty($item['capital'])) {
+                                DB::table('countries')->insert([
+                                    'country' => $item['name'],
+                                    'capital' => $item['capital'],
+                                    'iso2' => $item['iso2'],
+                                    'iso3' => $item['iso3'],
+                                    'created_at' => now(),
+                                    'updated_at' => now(),
+                                ]);
 
+                            }
                         }
                     }
                 }

@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { getRequest} from "./services/api-service";
 import { BrowserRouter as Router, Routes, Route,  } from "react-router-dom";
 import Quiz from "./components/Quiz";
+import { Questions } from "./types/questions";
+
 
 function App() {
 
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([])
-
+  const [loading, setLoading] = useState<boolean>(true);
+  const [data, setData] = useState<Questions>({
+    questions: [], 
+})
 
   useEffect(() => {
     const fetchData = async () =>{
